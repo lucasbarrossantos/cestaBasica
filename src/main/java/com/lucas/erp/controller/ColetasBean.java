@@ -10,6 +10,7 @@ import org.primefaces.context.RequestContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
 
@@ -63,7 +64,7 @@ public class ColetasBean implements Serializable {
         RequestContext.getCurrentInstance().closeDialog(coleta);
     }
 
-    public void updateColeta() {
+    public void updateColeta(){
         messages.info("Coleta Salva!");
         consultar();
         RequestContext.getCurrentInstance().update(
