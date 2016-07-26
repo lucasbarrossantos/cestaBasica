@@ -35,16 +35,16 @@ public class Coletas implements Serializable {
 
     @Transacional
     public void remover(Coleta coleta) {
+        Query query = manager.createQuery("delete Produto where coleta.id = :id").setParameter("id", coleta.getId());
+        query.executeUpdate();
+
         coleta = porId(coleta.getId());
         manager.remove(coleta);
     }
 
     public List<Produto> produtosDaColeta(Coleta coleta) {
-
-        String sql = "from Produto  where id = :id";
-
-        Query query = manager.createQuery(sql).setParameter("id", coleta.getId());
-
+        String sql = "from Produto  where coleta.id = :id";
+        Query query = manager.createQuery(sql, Produto.class).setParameter("id", coleta.getId());
         return (List<Produto>) query.getResultList();
     }
 }

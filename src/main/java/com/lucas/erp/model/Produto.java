@@ -11,6 +11,7 @@ public class Produto extends BaseEntity{
     private static final long serialVersionUID = 1L;
 
     @NotNull
+    @NotEmpty
     @Column(nullable = false)
     private String descricao;
 
@@ -27,7 +28,7 @@ public class Produto extends BaseEntity{
 
     private String tipo;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Coleta coleta;
 
     public String getDescricao() {

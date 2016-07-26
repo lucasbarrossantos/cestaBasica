@@ -40,6 +40,13 @@ public class Produtos implements Serializable {
     }
 
     @Transacional
+    public void remover(List<Produto> produtos) {
+        for (Produto produto : produtos) {
+            manager.remove(porId(produto.getId()));
+        }
+    }
+
+    @Transacional
     public void guardar(List<Produto> produtos) {
         for (Produto p : produtos) {
             if (p.isPersisted())

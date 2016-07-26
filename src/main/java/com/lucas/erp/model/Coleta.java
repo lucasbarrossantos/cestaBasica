@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ public class Coleta extends BaseEntity{
     private String coletadoEm;
 
     @NotNull
+    @Past
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date dataDaColeta;
@@ -108,6 +110,7 @@ public class Coleta extends BaseEntity{
                 ", duracaoDaColeta=" + duracaoDaColeta +
                 ", qtdColetada=" + qtdColetada +
                 ", responsavel='" + responsavel + '\'' +
+                ", produtos=" + produtos +
                 '}';
     }
 }

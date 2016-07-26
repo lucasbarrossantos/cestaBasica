@@ -75,7 +75,7 @@ public class ColetasBean implements Serializable {
         coleta = new Coleta();
         //todosOsProtudos = coletasRepositorio.produtosDaColeta();
     }
-
+ 
     public Coleta getColeta() {
         return coleta;
     }
@@ -93,7 +93,7 @@ public class ColetasBean implements Serializable {
     }
 
 
-    public void remover() {
+    public void remover(){
         coletasRepositorio.remover(coletaSelecionada);
         coletaSelecionada = null;
         consultar();

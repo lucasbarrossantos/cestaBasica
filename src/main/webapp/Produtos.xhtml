@@ -137,13 +137,13 @@
                                  columnClasses="ui-grid-col-4, ui-grid-col-8">
 
                         <p:outputLabel value="Descrição" for="descricao"/>
-                        <p:inputText id="descricao" value="#{produtosBean.prepararProduto.descricao}" required="true"/>
+                        <p:inputText id="descricao" value="#{produtosBean.prepararProduto.descricao}"/>
 
                         <p:outputLabel value="Marca" for="marca"/>
                         <p:inputText id="marca" value="#{produtosBean.prepararProduto.marca}"/>
 
                         <p:outputLabel value="Preço" for="preco"/>
-                        <p:inputText id="preco" value="#{produtosBean.prepararProduto.preco}" required="true">
+                        <p:inputText id="preco" value="#{produtosBean.prepararProduto.preco}">
                             <f:convertNumber/>
                             <p:ajax update="preco"/>
                         </p:inputText>
