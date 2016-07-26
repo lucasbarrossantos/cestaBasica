@@ -1,0 +1,174 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/templates/Layout.xhtml">
+
+    <ui:define name="corpo">
+        <h1 class="aw-page-title">Coleta</h1>
+
+        <h:form id="frm">
+
+            <p:messages id="msgs"/>
+
+            <p:toolbar id="toolbar">
+                <p:toolbarGroup>
+                    <p:commandButton value="Salvar" icon="ui-icon-disk"
+                                     action="#{coletasBean.salvar}"
+                                     disabled="#{produtosBean.produtosDaColeta.size() == 0}"
+                                     process="@this coletaPanel" update="coletaPanel :frm:msgs">
+                    </p:commandButton>
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <div class="ui-fluid">
+                <p:panelGrid id="coletaPanel" columns="4" layout="grid"
+                             style="margin-top: 20px; margin-bottom: 40px"
+                             styleClass="panelgrid-noborder"
+                             columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4">
+
+                    <p:outputLabel value="Local" for="localDaColeta"/>
+                    <p:inputText id="localDaColeta" value="#{coletasBean.coleta.coletadoEm}" required="true"/>
+
+                    <p:outputLabel value="Data" for="dataDaColeta"/>
+                    <p:calendar id="dataDaColeta" pattern="dd/MM/yyyy"
+                                mask="99/99/9999" effect="slide" locale="pt"
+                                value="#{coletasBean.coleta.dataDaColeta}" required="true">
+                        <p:ajax update="dataDaColeta"/>
+                    </p:calendar>
+
+                    <p:outputLabel value="Hora" for="horaDaColeta"/>
+                    <p:inputMask mask="99:99:99" id="horaDaColeta"
+                                 value="#{coletasBean.coleta.horaDaColeta}" required="true">
+                        <f:convertDateTime for="horaDaColeta" pattern="HH:mm:ss"/>
+                    </p:inputMask>
+
+                    <p:outputLabel value="Duração" for="duracaoDaColeta"/>
+                    <p:inputMask mask="99:99:99" id="duracaoDaColeta"
+                                 value="#{coletasBean.coleta.duracaoDaColeta}" required="true">
+                        <f:convertDateTime for="duracaoDaColeta" pattern="HH:mm:ss"/>
+                    </p:inputMask>
+                    <p:outputLabel/>
+                    <p:outputLabel/>
+
+                    <p:outputLabel value="Responsável" for="responsavelPorColeta"/>
+                    <p:inputText id="responsavelPorColeta" value="#{coletasBean.coleta.responsavel}"
+                                 required="true"/>
+
+                </p:panelGrid>
+            </div>
+
+            <h1 class="aw-page-title">Produtos</h1>
+
+            <p:toolbar id="novoItemToolbar">
+                <f:facet name="left">
+                    <p:commandButton value="Novo item" icon="ui-icon-cart"
+                                     oncomplete="PF('itemDialog').show()"
+                                     process="@this" update="itemPanel">
+                        <p:resetInput target="itemPanel"/>
+                    </p:commandButton>
+
+                    <span class="ui-separator">
+						<span class="ui-icon ui-icon-grip-dotted-vertical"/>
+            		</span>
+
+                    <p:commandButton title="Exluir" action="#{produtosBean.removerProdutoSelecionado}"
+                                     disabled="#{produtosBean.produtoSelecionado == null}"
+                                     process="@this" icon="ui-icon-trash"
+                                     update=":frm:msgs :frm:novoItemToolbar">
+
+                        <p:resetInput target="item-Dialog"/>
+
+                        <p:confirm icon="ui-icon-alert" header="Confirmação de exclusão"
+                                   message="Tem certeza que deseja excluir o produto?"/>
+                    </p:commandButton>
+
+                    <p:commandButton icon="ui-icon-pencil" title="Editar" process="@this"
+                                     disabled="#{produtosBean.produtoSelecionado == null}"
+                                     oncomplete="PF('itemDialog').show()" update="item-Dialog">
+                        <p:resetInput target="item-Dialog"/>
+                        <f:setPropertyActionListener value="#{produtosBean.produtoSelecionado}"
+                                                     target="#{produtosBean.prepararProduto}"/>
+                    </p:commandButton>
+                </f:facet>
+            </p:toolbar>
+
+            <p:dataTable id="itensTable" value="#{produtosBean.todosProdutos}" var="item"
+                         emptyMessage="Nenhum item adicionado."
+                         reflow="true"
+                         style="margin-top: 10px"
+                         selection="#{produtosBean.produtoSelecionado}"
+                         selectionMode="single" rowKey="#{item.id}">
+
+                <p:ajax event="rowSelect"
+                        update=":frm:novoItemToolbar"/> <!-- Atualiza a toobar quando for clicado na linha da tabela -->
+                <p:ajax event="rowUnselect"
+                        update=":frm:novoItemToolbar"/> <!-- Atualiza a toobar quando for clicado na linha da tabela -->
+
+                <p:column headerText="Descrição">
+                    <h:outputText value="#{item.descricao}"/>
+                </p:column>
+
+                <p:column headerText="Marca">
+                    <h:outputText value="#{item.marca}"/>
+                </p:column>
+
+                <p:column headerText="Preço">
+                    <h:outputText value="#{item.preco}">
+                        <f:convertNumber type="currency"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Tipo">
+                    <h:outputText value="#{item.tipo}"/>
+                </p:column>
+
+            </p:dataTable>
+
+            <p:dialog widgetVar="itemDialog" header="Novo item"
+                      resizable="false" style="min-width: 300px" responsive="true" id="item-Dialog"
+                      closeOnEscape="true">
+
+                <h:panelGroup id="itemPanel" layout="block" styleClass="ui-fluid">
+                    <p:messages id="msgDialog"/>
+
+                    <p:panelGrid columns="2" layout="grid" styleClass="panelgrid-noborder"
+                                 columnClasses="ui-grid-col-4, ui-grid-col-8">
+
+                        <p:outputLabel value="Descrição" for="descricao"/>
+                        <p:inputText id="descricao" value="#{produtosBean.prepararProduto.descricao}" required="true"/>
+
+                        <p:outputLabel value="Marca" for="marca"/>
+                        <p:inputText id="marca" value="#{produtosBean.prepararProduto.marca}"/>
+
+                        <p:outputLabel value="Preço" for="preco"/>
+                        <p:inputText id="preco" value="#{produtosBean.prepararProduto.preco}" required="true">
+                            <f:convertNumber/>
+                            <p:ajax update="preco"/>
+                        </p:inputText>
+
+                        <p:outputLabel value="Tipo" for="tipo"/>
+                        <p:inputText id="tipo" value="#{produtosBean.prepararProduto.tipo}"/>
+
+                        <p:outputLabel value="Obs:" for="memo"/>
+                        <p:inputTextarea id="memo" value="#{produtosBean.prepararProduto.memo}"/>
+
+                        <p:outputLabel/>
+                        <p:commandButton value="Adicionar"
+                                         action="#{produtosBean.adicionarProdutos}"
+                                         process="itemPanel" icon="ui-icon-disk"
+                                         update="itemPanel msgDialog frm:itensTable frm:toolbar"
+                                         oncomplete="if (!args.validationFailed) PF('itemDialog').hide()">
+                        </p:commandButton>
+
+                    </p:panelGrid>
+
+                </h:panelGroup>
+
+            </p:dialog>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
