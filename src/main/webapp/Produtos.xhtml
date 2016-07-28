@@ -16,7 +16,7 @@
                 <p:toolbarGroup>
                     <p:commandButton value="Salvar" icon="ui-icon-disk"
                                      action="#{coletasBean.salvar}"
-                                     disabled="#{produtosBean.produtosDaColeta.size() == 0}"
+                                     disabled="#{produtosBean.desabilitarBtnSalvarColeta}"
                                      process="@this coletaPanel" update="coletaPanel :frm:msgs">
                     </p:commandButton>
                 </p:toolbarGroup>
@@ -34,27 +34,26 @@
                     <p:outputLabel value="Data" for="dataDaColeta"/>
                     <p:calendar id="dataDaColeta" pattern="dd/MM/yyyy"
                                 mask="99/99/9999" effect="slide" locale="pt"
-                                value="#{coletasBean.coleta.dataDaColeta}" required="true">
+                                value="#{coletasBean.coleta.dataDaColeta}">
                         <p:ajax update="dataDaColeta"/>
                     </p:calendar>
 
                     <p:outputLabel value="Hora" for="horaDaColeta"/>
                     <p:inputMask mask="99:99:99" id="horaDaColeta"
-                                 value="#{coletasBean.coleta.horaDaColeta}" required="true">
+                                 value="#{coletasBean.coleta.horaDaColeta}" >
                         <f:convertDateTime for="horaDaColeta" pattern="HH:mm:ss"/>
                     </p:inputMask>
 
                     <p:outputLabel value="Duração" for="duracaoDaColeta"/>
                     <p:inputMask mask="99:99:99" id="duracaoDaColeta"
-                                 value="#{coletasBean.coleta.duracaoDaColeta}" required="true">
+                                 value="#{coletasBean.coleta.duracaoDaColeta}">
                         <f:convertDateTime for="duracaoDaColeta" pattern="HH:mm:ss"/>
                     </p:inputMask>
                     <p:outputLabel/>
                     <p:outputLabel/>
 
                     <p:outputLabel value="Responsável" for="responsavelPorColeta"/>
-                    <p:inputText id="responsavelPorColeta" value="#{coletasBean.coleta.responsavel}"
-                                 required="true"/>
+                    <p:inputText id="responsavelPorColeta" value="#{coletasBean.coleta.responsavel}"/>
 
                 </p:panelGrid>
             </div>
@@ -65,8 +64,8 @@
                 <f:facet name="left">
                     <p:commandButton value="Novo item" icon="ui-icon-cart"
                                      oncomplete="PF('itemDialog').show()"
-                                     process="@this" update="itemPanel">
-                        <p:resetInput target="itemPanel"/>
+                                     process="@this" update="frm:itemPanel">
+                        <p:resetInput target="frm:itemPanel"/>
                     </p:commandButton>
 
                     <span class="ui-separator">
@@ -143,7 +142,7 @@
                         <p:inputText id="marca" value="#{produtosBean.prepararProduto.marca}"/>
 
                         <p:outputLabel value="Preço" for="preco"/>
-                        <p:inputText id="preco" value="#{produtosBean.prepararProduto.preco}">
+                        <p:inputText id="preco" value="#{produtosBean.prepararProduto.preco}" placeholder="$">
                             <f:convertNumber/>
                             <p:ajax update="preco"/>
                         </p:inputText>

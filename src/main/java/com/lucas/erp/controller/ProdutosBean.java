@@ -29,11 +29,14 @@ public class ProdutosBean implements Serializable {
     private Produto produtoSelecionado;
     private List<Produto> produtosDaColeta;
 
+    private boolean desabilitarBtnSalvarColeta = true;
+
     public void consultarProdutos() {
         todosProdutos = produtosRepositorio.produtosParaColeta();
     }
 
     public void adicionarProdutos() {
+
         produtosRepositorio.guardar(prepararProduto);
         messages.info("Produto " + prepararProduto.getDescricao() + " Adicionado!");
         prepararProduto = new Produto();
@@ -41,6 +44,7 @@ public class ProdutosBean implements Serializable {
         RequestContext.getCurrentInstance().update(
                 Arrays.asList("frm:itemPanel")
         );
+        desabilitarBtnSalvarColeta = false;
     }
 
     public List<Produto> getProdutosDaColeta() {
@@ -79,8 +83,18 @@ public class ProdutosBean implements Serializable {
 
         messages.info("Produto removido!");
         RequestContext.getCurrentInstance().update(
-                Arrays.asList("frm:itensTable", "frm:novoItemToolbar", "fmr:msgs")
+                Arrays.asList("frm:itensTable", "frm:novoItemToolbar", "fmr:msgs", "frm:toolbar")
         );
+
+        if(todosProdutos.size() == 0)
+            desabilitarBtnSalvarColeta = true;
     }
 
+    public boolean isDesabilitarBtnSalvarColeta() {
+        return desabilitarBtnSalvarColeta;
+    }
+
+    public void setDesabilitarBtnSalvarColeta(boolean desabilitarBtnSalvarColeta) {
+        this.desabilitarBtnSalvarColeta = desabilitarBtnSalvarColeta;
+    }
 }
